@@ -1,11 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Chart : MonoBehaviour
 {
+    [SerializeField]
+    Main MainController;
+
     [SerializeField]
     private Image filledPart;
     [SerializeField]
@@ -40,13 +41,14 @@ public class Chart : MonoBehaviour
     }
 
     public void StartTimer() {
+        MainController.PauseAll();
         timerStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         isActive = true;
     }
 
     public void PauseTimer() {
         long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        totalTimeFixed += now - timerStart;
+        if (timerStart != 0) totalTimeFixed += now - timerStart;
         isActive = false;
     }
 
