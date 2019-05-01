@@ -14,10 +14,9 @@ public class Chart : MonoBehaviour
 
     private const float MAX_TIME = 43200; // 12 hours
 
-    private long totalTimeFixed;
+    private long timeFixed;
     private long timerStart;
-
-    bool isActive = false;
+    private bool isActive;
 
     void Start()
     {
@@ -29,7 +28,7 @@ public class Chart : MonoBehaviour
         if (!isActive) return;
 
         long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        float delta = totalTimeFixed + (now - timerStart);
+        float delta = timeFixed + (now - timerStart);
 
         SetFilledPart(delta);
         SetTimer(delta);
@@ -48,12 +47,14 @@ public class Chart : MonoBehaviour
 
     public void PauseTimer() {
         long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        if (timerStart != 0) totalTimeFixed += now - timerStart;
+        if (timerStart != 0) timeFixed += now - timerStart;
+
+        timerStart = 0;
         isActive = false;
     }
 
     public void StopTimer() {
-        totalTimeFixed = 0;
+        timeFixed = 0;
         timerStart = 0;
         isActive = false;
 
